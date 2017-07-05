@@ -9,10 +9,8 @@ const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 const mongo = require('mongodb');
 const mongoose = require('mongoose');
-const MongoStore = require("connect-mongo")(session);
 
 //configuring environmental variiables
 
@@ -39,50 +37,11 @@ app.use(cookieParser());
 // Set Static Folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Express Session
-
-app.use(session({
-    secret: 'secret',
-    saveUninitialized: true,
-    resave: true,
-    store: new MongoStore({ mongooseConnection : mongoose.connection}),
-    cookie : {maxAge : 180 * 60 * 1000}
-}));
-
 // Passport init
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Express Validator
-app.use(expressValidator({
-  errorFormatter: (param, msg, value)=> {
-      let namespace = param.split('.')
-      , root    = namespace.shift()
-      , formParam = root;
-
-    while(namespace.length) {
-      formParam += '[' + namespace.shift() + ']';
-    }
-    return {
-      param : formParam,
-      msg   : msg,
-      value : value
-    };
-  }
-}));
-
 // Connect Flash
-app.use(flash());
-
-// Global Vars
-app.use((req, res, next)=> {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  res.locals.error = req.flash('error');
-  res.locals.user = req.user || null;
-  res.locals.session = req.session
-  next();
-});
 
 app.use('/', routes);
 
