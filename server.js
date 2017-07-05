@@ -11,7 +11,7 @@ app.use(express.static("public"));
 app.use("/",routes)
 app.use(bodyparser.urlencoded({extended : false}));
 
-app.set("port",process.env.PORT || 3000);
+app.set("port",(process.env.PORT || 3000));
 
 app.engine('.hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }));
 app.set('views', path.join(__dirname, 'views'));
