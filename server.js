@@ -23,7 +23,6 @@ const app = express();
 
 
 const routes = require('./routes/index');
-const userRoutes = require('./routes/users');
 
 
 
@@ -85,7 +84,6 @@ app.use((req, res, next)=> {
   next();
 });
 
-app.use('/user', userRoutes);
 app.use('/', routes);
 
 
